@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PID=$(pgrep -f genreateLog.py)
+PID=$(pgrep -f generateLog.py)
 if [ -z "$PID" ]; then
     echo "No process found."
 else
