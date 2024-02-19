@@ -42,8 +42,8 @@ services:
         read_only: true
     ports:
       - "5044:5044"
-      - "5000:5000/tcp"
-      - "5000:5000/udp"
+      - "5001:5000/tcp"
+      - "5001:5000/udp"
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
@@ -75,7 +75,7 @@ services:
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
-        - log-data:/var/log/server
+        - ./filebeat:/var/log
     networks:
       - elk
     depends_on:
