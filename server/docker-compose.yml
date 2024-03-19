@@ -106,6 +106,18 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     networks:
       - elk
+  
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mqtt_broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - elk
+    environment:
+      TZ: "Asia/Seoul"
 
 networks:
   elk:
