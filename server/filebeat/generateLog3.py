@@ -31,7 +31,7 @@ def generate_sensor_data():
 
 while True:
     timestamp, ph, dissolved_oxygen, salinity, turbidity, ammonia = generate_sensor_data()
-    log_line = "timestamp: {}, id: 1, pH: {}, DO(PPM): {}, salinity(%): {}, turbidity(NTU): {}, ammonia(mg/L): {}\n".format(timestamp, ph, dissolved_oxygen, salinity, turbidity, ammonia)
-    with open('test.log', 'a') as log_file:
+    log_line = "timestamp: {}, id: 3, pH: {}, DO(PPM): {}, salinity(%): {}, turbidity(NTU): {}, ammonia(mg/L): {}\n".format(timestamp, ph, dissolved_oxygen, salinity, turbidity, ammonia)
+    with open('test3.log', 'a') as log_file:
         log_file.write(log_line)
     time.sleep(5)
