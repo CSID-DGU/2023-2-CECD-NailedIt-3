@@ -4,6 +4,11 @@ filebeat.inputs:
     paths:
       - /var/log/*.log
 
+  - type: mqtt
+    hosts: ["tcp://mosquitto:1883"]
+    topics: ["log"]
+    client_id: filebeat_mqtt
+
 output.kafka:
   hosts: ["kafka:9092"]
   topic: "log"
@@ -12,3 +17,7 @@ output.kafka:
   required_acks: 1
   compression: gzip
   max_message_bytes: 1000000
+
+output.file:
+  path: "/var/log/mqtt"
+  filename: mqtt.log
