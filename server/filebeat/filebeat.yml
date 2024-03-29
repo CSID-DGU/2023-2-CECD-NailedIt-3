@@ -6,7 +6,8 @@ filebeat.inputs:
 
   - type: mqtt
     hosts: ["tcp://mosquitto:1883"]
-    topics: ["log"]
+    topics:
+      - "#"
     client_id: filebeat_mqtt
 
 output.kafka:
