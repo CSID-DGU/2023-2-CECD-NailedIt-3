@@ -18,7 +18,3 @@ output.kafka:
   required_acks: 1
   compression: gzip
   max_message_bytes: 1000000
-
-output.file:
-  path: "/var/log/mqtt"
-  filename: mqtt.log
