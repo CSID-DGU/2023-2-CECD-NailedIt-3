@@ -128,6 +128,7 @@ services:
       - "1883:1883"
     volumes:
       - ./mqtt_broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mqtt_broker:/mosquitto/data
       - /etc/localtime:/etc/localtime:ro
     networks:
       - elk
