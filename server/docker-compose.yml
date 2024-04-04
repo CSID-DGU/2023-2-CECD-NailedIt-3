@@ -107,6 +107,21 @@ services:
     networks:
       - elk
   
+  # react:
+  #   restart: always
+  #   command : yarn dev
+  #   container_name: front
+  #   build:
+  #     context: ../react-dashboard/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - /usr/src/app/node_modules
+  #     - ./:/usr/src/app
+  #   stdin_open: true
+  #   networks:
+  #     - elk
   mosquitto:
     image: eclipse-mosquitto
     ports:
