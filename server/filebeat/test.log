@@ -22,3 +22,4 @@ timestamp: 2024-03-19 12:42:08, id: 1, pH: 7.15, DO(PPM): 8.45, salinity(%): 0.3
 timestamp: 2024-03-19 12:42:13, id: 1, pH: 7.06, DO(PPM): 8.45, salinity(%): 0.37, turbidity(NTU): 9.39, ammonia(mg/L): 0.02
 timestamp: 2024-03-19 12:42:18, id: 1, pH: 7.02, DO(PPM): 8.37, salinity(%): 0.39, turbidity(NTU): 8.45, ammonia(mg/L): 0.03
 timestamp: 2024-03-19 12:42:23, id: 1, pH: 7.01, DO(PPM): 8.28, salinity(%): 0.36, turbidity(NTU): 7.85, ammonia(mg/L): 0.04
+timestamp: 2024-03-19 12:42:23, id: 1, pH: 7.12, DO(PPM): 8.71, salinity(%): 0.36, turbidity(NTU): 7.59, ammonia(mg/L): 0.01
