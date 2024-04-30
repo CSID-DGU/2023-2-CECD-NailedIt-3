@@ -11,7 +11,8 @@ filebeat.inputs:
     client_id: filebeat_mqtt
 
 output.kafka:
-  hosts: ["kafka:9092"]
+  #hosts: ["kafka:9092"]
+  hosts: ["kafka1:9092", "kafka2:9093", "kafka3:9094"]
   topic: "log"
   partition.round_robin:
     reachable_only: false
