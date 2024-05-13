@@ -87,8 +87,6 @@ services:
     container_name: kafka-kraft1
     ports:
       - "9092:9092"
-    volumes:
-      - ./kafka/kafka-kraft1:/var/lib/kafka/data
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
@@ -108,8 +106,6 @@ services:
     container_name: kafka-kraft2
     ports:
       - "9093:9093"
-    volumes:
-      - ./kafka/kafka-kraft2:/var/lib/kafka/data
     environment:
       KAFKA_NODE_ID: 2
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
@@ -129,8 +125,6 @@ services:
     container_name: kafka-kraft3
     ports:
       - "9094:9094"
-    volumes:
-      - ./kafka/kafka-kraft3:/var/lib/kafka/data
     environment:
       KAFKA_NODE_ID: 3
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
