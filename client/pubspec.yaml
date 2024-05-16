@@ -1,0 +1,70 @@
+name: nailed_it
+description: "Dongguk Univ CECD 3 Team Nailed-It Hybrid App"
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Icons
+  cupertino_icons: ^1.0.6
+
+  # Splash Screen
+  flutter_native_splash: ^2.4.0
+
+  # Dotenv
+  flutter_dotenv: ^5.1.0
+
+  # Localization And Logger
+  intl: ^0.18.1
+  logger: ^2.1.0
+
+  # GetX
+  get: ^4.6.6
+
+  # Svg
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+  # Localization
+  intl_translation: ^0.18.1
+
+  # app icon
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+#    - assets/config/.env
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Thin.otf
+          weight: 100
+        - asset: assets/fonts/Pretendard-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/Pretendard-Light.otf
+          weight: 300
+        - asset: assets/fonts/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Pretendard-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/Pretendard-Black.otf
+          weight: 900
