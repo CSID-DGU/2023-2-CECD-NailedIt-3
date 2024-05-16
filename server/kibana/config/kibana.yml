@@ -11,5 +11,5 @@ monitoring.ui.container.elasticsearch.enabled: true
 #
 elasticsearch.username: elastic
 elasticsearch.password: capstone3
-# 암호화된 저장 객체를 사용하려면, 암호화 키를 설정해야 합니다.
+# 암호화 키를 설정
 xpack.encryptedSavedObjects.encryptionKey: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
