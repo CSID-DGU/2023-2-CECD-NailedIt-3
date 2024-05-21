@@ -1,0 +1,23 @@
+# elastalert/rules/ph_rule.yaml
+name: "PH Level Alert"
+type: "metric_aggregation"
+index: "we_are_happy"
+metric_agg_key: "ph"
+metric_agg_type: "max"
+query_key: "ph"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+max_threshold: 8.0
+filter:
+- range:
+    ph:
+      gt: 8.0
+alert:
+- "post"
+http_post_url: "http://spring-test:8080/webhook"
+http_post_static_payload:
+  message: "이상 값 탐지. PH 값이 8.0을 초과했습니다."

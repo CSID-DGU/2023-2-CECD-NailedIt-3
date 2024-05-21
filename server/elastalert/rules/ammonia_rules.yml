@@ -1,0 +1,23 @@
+# elastalert/rules/ammonia_rule.yaml
+name: "Ammonia Level Alert"
+type: "metric_aggregation"
+index: "we_are_happy"
+metric_agg_key: "ammonia"
+metric_agg_type: "max"
+query_key: "ammonia"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+max_threshold: 0.05 # 예시 임계값 (적절히 수정)
+filter:
+- range:
+    ammonia:
+      gt: 0.05
+alert:
+- "post"
+http_post_url: "http://spring-test:8080/webhook"
+http_post_static_payload:
+  message: "이상 값 탐지. Ammonia 값이 1.0을 초과했습니다."

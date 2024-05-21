@@ -1,0 +1,23 @@
+# elastalert/rules/turbidity_rule.yaml
+name: "Turbidity Level Alert"
+type: "metric_aggregation"
+index: "we_are_happy"
+metric_agg_key: "turbidity"
+metric_agg_type: "max"
+query_key: "turbidity"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+max_threshold: 6.0  # 예시 임계값 (적절히 수정)
+filter:
+- range:
+    turbidity:
+      gt: 6.0
+alert:
+- "post"
+http_post_url: "http://spring-test:8080/webhook"
+http_post_static_payload:
+  message: "이상 값 탐지. 탁도 값이 5.0을 초과했습니다."

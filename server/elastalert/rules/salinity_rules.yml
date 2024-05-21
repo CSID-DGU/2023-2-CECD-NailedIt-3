@@ -1,0 +1,23 @@
+# elastalert/rules/salinity_rule.yaml
+name: "Salinity Level Alert"
+type: "metric_aggregation"
+index: "we_are_happy"
+metric_agg_key: "salinity"
+metric_agg_type: "max"
+query_key: "salinity"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+max_threshold: 0.38  # 예시 임계값 (적절히 수정)
+filter:
+- range:
+    salinity:
+      gt: 0.38
+alert:
+- "post"
+http_post_url: "http://spring-test:8080/webhook"
+http_post_static_payload:
+  message: "이상 값 탐지. 염도 값이 35.0을 초과했습니다."
