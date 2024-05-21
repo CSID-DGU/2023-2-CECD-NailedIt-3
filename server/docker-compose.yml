@@ -25,6 +25,11 @@ services:
       discovery.type: single-node
     networks:
       - elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   logstash:
     build:
@@ -143,7 +148,7 @@ services:
     platform: linux/amd64
     container_name: kafka-ui
     ports:
-      - "8080:8080"
+      - "8081:8081"
     restart: always
     environment:
       KAFKA_CLUSTERS_0_NAME: local-cluster
@@ -163,10 +168,42 @@ services:
       - ./mqtt_broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mqtt_broker:/mosquitto/data
       - /etc/localtime:/etc/localtime:ro
+      - ./mqtt_broker:/app
     networks:
       - elk
     environment:
       TZ: "Asia/Seoul"
+
+  elastalert:
+    image: jertel/elastalert2:latest
+    container_name: elastalert
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+      - "USE_SSL=false"
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./elastalert/config:/opt/elastalert/config
+      - ./elastalert/rules:/opt/elastalert/rules
+      - ./elastalert/rule_templates:/opt/elastalert/rule_templates
+      - ./elastalert/logs:/opt/elastalert/logs
+    entrypoint: >
+      sh -c "elastalert-create-index --index elastalert_status --host elasticsearch --port 9200 --user elastic --password changeme --no-verify-certs --no-ssl --url-prefix '' --old-index we_are_happy &&
+             elastalert --config /opt/elastalert/config/config.yml --verbose"
+    networks:
+      - elk
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  spring-test:
+    image: chanjin/capstone_design_2
+    container_name: spring-test
+    ports:
+      - "8080:8080"
+    networks:
+      - elk
 
 networks:
   elk:
