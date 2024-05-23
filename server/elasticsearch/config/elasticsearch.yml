@@ -11,5 +11,4 @@ network.host: 0.0.0.0
 xpack.license.self_generated.type: basic
 xpack.security.enabled: false
 xpack.monitoring.collection.enabled: true
-
 xpack.security.authc.api_key.enabled: true

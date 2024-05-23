@@ -1,14 +1,25 @@
 filebeat.inputs:
-  - type: log
-    enabled: true
-    paths:
-      - /var/log/*.log
+  # - type: log
+  #   enabled: true
+  #   paths:
+  #     - /var/log/*.log
 
-  - type: mqtt
-    hosts: ["tcp://mosquitto:1883"]
-    topics:
-      - "#"
-    client_id: filebeat_mqtt
+  # mqtt로 받을 때
+  # - type: mqtt
+  #   hosts: ["tcp://mosquitto:1883"]
+  #   topics:
+  #     - "#"
+  #   client_id: filebeat_mqtt
+
+  # REST 통신 시 JSON으로 받을 때
+  - type: http_endpoint
+    enabled: true
+    listen_address: 0.0.0.0
+    listen_port: 8082
+    response_code: 200
+    response_body: '{"message": "success"}'
+    url: "/api/v1/logs"
+    prefix: "json"
 
 output.kafka:
   hosts: 
