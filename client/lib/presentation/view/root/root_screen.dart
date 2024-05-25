@@ -10,6 +10,18 @@ class RootScreen extends BaseScreen<RootViewModel> {
   const RootScreen({super.key});
 
   @override
+  bool get wrapWithInnerSafeArea => true;
+
+  @override
+  bool get setTopInnerSafeArea => true;
+
+  @override
+  bool get setBottomInnerSafeArea => false;
+
+  @override
+  bool get extendBodyBehindAppBar => true;
+
+  @override
   Widget buildBody(BuildContext context) {
     return Obx(
       () => IndexedStack(

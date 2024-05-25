@@ -5,15 +5,18 @@ class InfinityHorizonLine extends StatelessWidget {
     super.key,
     required this.height,
     this.color,
+    this.margin,
   });
 
-  final Color? color;
   final double height;
+  final Color? color;
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      margin: margin,
       height: height,
       color: color,
     );
