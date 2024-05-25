@@ -70,3 +70,104 @@ exports.Withdrawal = functions.region('asia-northeast3').auth.user().onDelete(as
     return;
   }
 );
+
+
+/* --------------------------------------------------------------------------------------------- */
+/* ---------------------------------------- Https Functions ------------------------------------ */
+/* --------------------------------------------------------------------------------------------- */
+
+api.post('/notifications', async (req, res) => {
+    const { data } = req.body;
+
+    let message;
+    const type = "notification";
+
+    // Body Validation
+    try {
+      message = data.message;
+    } catch (error) {
+      logger.error("Invalid request body");
+      res.status(400).json();
+      return;
+    }
+
+    // Duplicate Message Log In 1 minute
+    const endAt = new Date(Date.now());
+    const startAt = new Date(endAt - 60000);
+
+    // Find Send User Device Token
+    const users = await getReceviedUsers(message, type, startAt, endAt);
+    const userIds = users.map((user) => user.id);
+    const deviceTokens = users.map((user) => user.device_token);
+
+    // Save Notification Log
+    firestore.collection('notification_logs').add({
+      message,
+      type,
+      user_id: userIds,
+      create_at: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // Send Notification
+    for (const deviceToken of deviceTokens) {
+      const message = {
+        token: deviceToken,
+        notification: {
+          title: "양식장에 새로운 소식이 도착했습니다",
+          body: message,
+        },
+        data: {
+          type: "message",
+        },
+        apns: {
+          payload: {
+              aps: {
+                  sound: "default",
+              },
+          },
+        },
+      };
+
+      await messaging.send(message)
+    }
+
+    res.status(200).json();
+  }
+);
+
+const getReceviedUsers = async (message, type, startAt, endAt) => {
+  // Caluculate time range
+  const endAt = new Date(Date.now());
+  const startAt = new Date(endAt - 60000);
+
+  // Read notification logs
+  const notificationLogs = await firestore.collection('notification_logs')
+    .where("message", "==", message)
+    .where("type", "==", type)
+    .get();
+
+  // Filter duplicated notification logs
+  const duplicatedNotificationLogs = notificationLogs.docs.filter((doc) => {
+    const createAt = doc.data().create_at.toDate();
+    return createAt >= startAt && createAt <= endAt;
+  });
+
+  // Get duplicated user ids
+  const userIds = duplicatedNotificationLogs.reduce((acc, doc) => {
+    const userId = doc.data().user_id;
+    if (!acc.includes(userId)) {
+      acc.push(userId);
+    }
+    return acc;
+  }, []);
+
+  // Read all users
+  const totalUsers = await firestore.collection('users').get();
+
+  // Filter users who have not received the notification
+  const receivedUsers = totalUsers.docs.filter((doc) => {
+    return !userIds.includes(doc.data().id);
+  });
+
+  return receivedUsers;
+};
