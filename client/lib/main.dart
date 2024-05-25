@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nailed_it/app/main_app.dart';
-
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:nailed_it/main_app.dart';
 
 void main() async {
   // WidgetsBinding
@@ -13,5 +12,3 @@ void main() async {
   // Run App
   runApp(const MainApp());
 }
-
-
