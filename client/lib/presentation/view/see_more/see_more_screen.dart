@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nailed_it/app/config/color_system.dart';
 import 'package:nailed_it/core/view/base_screen.dart';
+import 'package:nailed_it/presentation/view/see_more/widget/setting_view.dart';
+import 'package:nailed_it/presentation/view/see_more/widget/user_brief_view.dart';
 import 'package:nailed_it/presentation/view_model/see_more/see_more_view_model.dart';
 import 'package:nailed_it/presentation/widget/appbar/default_appbar.dart';
 
@@ -10,7 +12,7 @@ class SeeMoreScreen extends BaseScreen<SeeMoreViewModel> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(64),
+      preferredSize: const Size.fromHeight(60),
       child: DefaultAppBar(
         title: '더보기',
         decoration: BoxDecoration(
@@ -28,8 +30,11 @@ class SeeMoreScreen extends BaseScreen<SeeMoreViewModel> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return const Center(
-      child: Text('Profile Screen'),
+    return const Column(
+      children: [
+        UserBriefView(),
+        SettingView(),
+      ],
     );
   }
 }

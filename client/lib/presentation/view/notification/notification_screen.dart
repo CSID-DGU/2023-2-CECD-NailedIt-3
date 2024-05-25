@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nailed_it/app/config/color_system.dart';
 import 'package:nailed_it/core/view/base_screen.dart';
+import 'package:nailed_it/presentation/view/notification/widget/notification_history_list_view.dart';
 import 'package:nailed_it/presentation/view_model/notification/notification_view_model.dart';
 import 'package:nailed_it/presentation/widget/appbar/default_appbar.dart';
 
@@ -10,7 +11,7 @@ class NotificationScreen extends BaseScreen<NotificationViewModel> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(64),
+      preferredSize: const Size.fromHeight(60),
       child: DefaultAppBar(
         title: '알림',
         decoration: BoxDecoration(
@@ -28,8 +29,6 @@ class NotificationScreen extends BaseScreen<NotificationViewModel> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return const Center(
-      child: Text('Notification Screen'),
-    );
+    return const NotificationHistoryListView();
   }
 }
