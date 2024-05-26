@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nailed_it/core/entity/pagination.dart';
 import 'package:nailed_it/domain/entity/notification/notification_history_state.dart';
-import 'package:nailed_it/domain/usecase/read_notification_histories_use_case.dart';
+import 'package:nailed_it/domain/usecase/notification_history/read_notification_histories_use_case.dart';
 
 class NotificationViewModel extends GetxController {
   /* ------------------------------------------------------ */

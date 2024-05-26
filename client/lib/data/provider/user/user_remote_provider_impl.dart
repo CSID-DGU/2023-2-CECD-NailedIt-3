@@ -21,6 +21,13 @@ class UserRemoteProviderImpl implements UserRemoteProvider {
   }
 
   @override
+  Future<void> deleteUser() {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    return _storage.collection('users').doc(uid).delete();
+  }
+
+  @override
   Future<String> getId() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 

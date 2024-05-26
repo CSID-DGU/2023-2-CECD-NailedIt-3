@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nailed_it/app/config/app_routes.dart';
 import 'package:nailed_it/app/config/color_system.dart';
 import 'package:nailed_it/app/config/font_system.dart';
-import 'package:nailed_it/app/utility/log_util.dart';
 import 'package:nailed_it/core/view/base_widget.dart';
+import 'package:nailed_it/presentation/view/see_more/dialog/logout_dialog.dart';
+import 'package:nailed_it/presentation/view/see_more/dialog/withdrawal_dialog.dart';
 import 'package:nailed_it/presentation/view_model/see_more/see_more_view_model.dart';
 import 'package:nailed_it/presentation/widget/line/infinity_horizon_line.dart';
 
@@ -70,7 +72,29 @@ class SettingView extends BaseWidget<SeeMoreViewModel> {
 
   Widget _logoutView() => InkWell(
         onTap: () {
-          LogUtil.info("Logout");
+          Get.dialog(
+            LogoutDialog(
+              onConfirm: () {
+                viewModel.logout().then((value) {
+                  if (value) {
+                    _showSnackBar(
+                      '로그아웃 성공',
+                      '로그아웃 되었습니다.',
+                    );
+                    Get.offAllNamed(AppRoutes.LOGIN);
+                  } else {
+                    _showSnackBar(
+                      '로그아웃 실패',
+                      '알 수 없는 이유로 로그아웃에 실패했습니다. 재시도해주세요.',
+                    );
+                  }
+                });
+              },
+              onCancel: () {
+                Get.back();
+              },
+            ),
+          );
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -87,7 +111,29 @@ class SettingView extends BaseWidget<SeeMoreViewModel> {
 
   Widget _withdrawalView() => InkWell(
         onTap: () {
-          LogUtil.info("Withdrawal");
+          Get.dialog(
+            WithdrawalDialog(
+              onConfirm: () {
+                viewModel.withdrawal().then((value) {
+                  if (value) {
+                    _showSnackBar(
+                      '회원탈퇴 성공',
+                      '회원탈퇴 되었습니다.',
+                    );
+                    Get.offAllNamed(AppRoutes.LOGIN);
+                  } else {
+                    _showSnackBar(
+                      '회원탈퇴 실패',
+                      '알 수 없는 이유로 회원탈퇴에 실패했습니다. 재시도해주세요.',
+                    );
+                  }
+                });
+              },
+              onCancel: () {
+                Get.back();
+              },
+            ),
+          );
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -101,4 +147,15 @@ class SettingView extends BaseWidget<SeeMoreViewModel> {
           ),
         ),
       );
+
+  void _showSnackBar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.TOP,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      duration: const Duration(seconds: 2),
+      backgroundColor: ColorSystem.neutral.withOpacity(0.3),
+    );
+  }
 }

@@ -24,7 +24,7 @@ class UserState {
 
   factory UserState.initial() {
     return UserState(
-      id: '',
+      id: '00000',
       nickname: '',
       isAllowedNotification: false,
     );
