@@ -4,6 +4,7 @@ import 'package:nailed_it/core/view/base_screen.dart';
 import 'package:nailed_it/presentation/view/notification/widget/notification_history_list_view.dart';
 import 'package:nailed_it/presentation/view_model/notification/notification_view_model.dart';
 import 'package:nailed_it/presentation/widget/appbar/default_appbar.dart';
+import 'package:nailed_it/presentation/widget/button/custom_icon_button.dart';
 
 class NotificationScreen extends BaseScreen<NotificationViewModel> {
   const NotificationScreen({super.key});
@@ -23,6 +24,13 @@ class NotificationScreen extends BaseScreen<NotificationViewModel> {
             ),
           ),
         ),
+        actions: [
+          CustomIconButton(
+            assetPath: 'assets/icons/refresh.svg',
+            onPressed: viewModel.fetchIndexInPagination,
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }

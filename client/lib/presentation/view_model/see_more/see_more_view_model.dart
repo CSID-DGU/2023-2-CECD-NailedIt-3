@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:nailed_it/domain/entity/see_more/user_state.dart';
+import 'package:nailed_it/domain/repository/notification_history/notification_history_repository.dart';
 import 'package:nailed_it/domain/repository/user/user_repository.dart';
 import 'package:nailed_it/domain/usecase/auth/logout_use_case.dart';
 import 'package:nailed_it/domain/usecase/auth/withdrawal_use_case.dart';
@@ -43,6 +44,7 @@ class SeeMoreViewModel extends GetxController {
     );
     _withdrawalUseCase = WithdrawalUseCase(
       userRepository: Get.find<UserRepository>(),
+      notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
     );
 
     // Private Fields

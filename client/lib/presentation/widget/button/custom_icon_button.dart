@@ -25,8 +25,8 @@ class CustomIconButton extends StatelessWidget {
       ),
       icon: SvgPicture.asset(
         assetPath,
-        width: 32,
-        height: 32,
+        width: 24,
+        height: 24,
         colorFilter: colorFilter,
       ),
       onPressed: onPressed,

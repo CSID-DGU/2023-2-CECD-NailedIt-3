@@ -4,6 +4,7 @@ import 'package:nailed_it/domain/entity/notification/notification_history_state.
 import 'package:nailed_it/domain/repository/notification_history/notification_history_repository.dart';
 import 'package:nailed_it/domain/usecase/notification_history/read_notification_histories_use_case.dart';
 import 'package:nailed_it/domain/usecase/notification_history/read_notification_history_end_index_use_case.dart';
+import 'package:nailed_it/domain/usecase/notification_history/update_is_read_use_case.dart';
 
 class NotificationViewModel extends GetxController {
   /* ------------------------------------------------------ */
@@ -12,6 +13,7 @@ class NotificationViewModel extends GetxController {
   late final ReadNotificationHistoryEndIndexUseCase
       _readNotificationHistoryEndIndexUseCase;
   late final ReadNotificationHistoriesUseCase _readNotificationHistoriesUseCase;
+  late final UpdateIsReadUseCase _updateIsReadUseCase;
 
   /* ------------------------------------------------------ */
   /* ----------------- Private Fields --------------------- */
@@ -37,11 +39,14 @@ class NotificationViewModel extends GetxController {
     _readNotificationHistoriesUseCase = ReadNotificationHistoriesUseCase(
       notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
     );
+    _updateIsReadUseCase = UpdateIsReadUseCase(
+      notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
+    );
 
     _pagination = IndexPagination.initial();
     _notificationHistories = <NotificationHistoryState>[].obs;
 
-    fetchNotificationHistories();
+    fetchIndexInPagination();
   }
 
   void fetchIndexInPagination() async {
@@ -53,22 +58,31 @@ class NotificationViewModel extends GetxController {
       size: 10,
     );
 
-    await fetchNotificationHistories();
+    await fetchNotificationHistories(true);
   }
 
-  Future<void> fetchNotificationHistories() async {
+  Future<void> fetchNotificationHistories(bool isHardRefresh) async {
     _pagination = _pagination.copyWith(
       page: _pagination.page + 1,
     );
 
-    _notificationHistories.addAll(
-      await _readNotificationHistoriesUseCase.execute(
-        _pagination,
-      ),
+    List<NotificationHistoryState> readNotificationHistories =
+        await _readNotificationHistoriesUseCase.execute(
+      _pagination,
     );
+
+    if (isHardRefresh) {
+      _notificationHistories.clear();
+    }
+
+    _notificationHistories.addAll(readNotificationHistories);
   }
 
-  void fetchIsRead(int index) {
+  void fetchIsRead(int index) async {
+    await _updateIsReadUseCase.execute(
+      _notificationHistories[index].id,
+    );
+
     _notificationHistories[index] = _notificationHistories[index].copyWith(
       isRead: true,
     );
