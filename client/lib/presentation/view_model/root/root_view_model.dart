@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:nailed_it/app/utility/notification_util.dart';
 
 class RootViewModel extends GetxController {
   /* ------------------------------------------------------ */
@@ -14,6 +16,10 @@ class RootViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    FirebaseMessaging.onMessage
+        .listen(NotificationUtil.showFlutterNotification);
+    FirebaseMessaging.onBackgroundMessage(NotificationUtil.onBackgroundHandler);
 
     _selectedIndex = 0.obs;
   }
