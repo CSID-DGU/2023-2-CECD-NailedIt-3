@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     FlutterNativeSplash.remove();
+
     return GetMaterialApp(
       // App Title
       title: AppConfig.APP_TITLE,

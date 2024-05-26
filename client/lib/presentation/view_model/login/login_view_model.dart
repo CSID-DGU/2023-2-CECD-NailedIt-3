@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nailed_it/domain/repository/user_repository.dart';
-import 'package:nailed_it/domain/usecase/login_with_google_use_case.dart';
+import 'package:nailed_it/domain/repository/user/user_repository.dart';
+import 'package:nailed_it/domain/usecase/auth/login_use_case.dart';
 
 class LoginViewModel extends GetxController {
   /* ------------------------------------------------------ */
   /* ----------------- Private Fields --------------------- */
   /* ------------------------------------------------------ */
-  late final LoginWithGoogleUseCase _loginWithGoogleUseCase;
+  late final LoginUseCase _loginWithGoogleUseCase;
 
   /* ------------------------------------------------------ */
   /* ----------------- Private Fields --------------------- */
@@ -24,7 +24,7 @@ class LoginViewModel extends GetxController {
   void onInit() {
     super.onInit();
 
-    _loginWithGoogleUseCase = LoginWithGoogleUseCase(
+    _loginWithGoogleUseCase = LoginUseCase(
       userRepository: Get.find<UserRepository>(),
     );
 

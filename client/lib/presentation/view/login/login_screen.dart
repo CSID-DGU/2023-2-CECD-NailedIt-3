@@ -50,25 +50,28 @@ class LoginScreen extends GetView<LoginViewModel> {
   void _onPressedSignInButton() {
     viewModel.loginWithGoogle().then((value) {
       if (value) {
-        Get.snackbar(
+        _showSnackBar(
           '로그인에 성공했습니다.',
           '양식장의 알림을 받아보세요!',
-          snackPosition: SnackPosition.TOP,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          duration: const Duration(seconds: 2),
-          backgroundColor: ColorSystem.neutral.withOpacity(0.3),
         );
         Get.offAndToNamed(AppRoutes.ROOT);
       } else {
-        Get.snackbar(
+        _showSnackBar(
           '로그인에 실패했습니다.',
           '알 수 없는 이유로 로그인에 실패했습니다.',
-          snackPosition: SnackPosition.TOP,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          duration: const Duration(seconds: 2),
-          backgroundColor: ColorSystem.neutral.withOpacity(0.3),
         );
       }
     });
+  }
+
+  void _showSnackBar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.TOP,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      duration: const Duration(seconds: 2),
+      backgroundColor: ColorSystem.neutral.withOpacity(0.3),
+    );
   }
 }
