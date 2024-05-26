@@ -10,5 +10,11 @@ abstract class NotificationHistoryLocalProvider {
     bool isRead,
   );
 
-  Future<int> findMaxID();
+  Future<int> findEndIndex();
+
+  Future<List<NotificationHistoryData>> findAllBySmallerOrEqual(
+    int index,
+    int page,
+    int size,
+  );
 }

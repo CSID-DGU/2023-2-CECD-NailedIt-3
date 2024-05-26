@@ -5,6 +5,7 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nailed_it/app/config/firebase_options.dart';
 import 'package:nailed_it/app/utility/notification_util.dart';
+import 'package:nailed_it/data/factory/local_database_factory.dart';
 import 'package:nailed_it/data/factory/local_storage_factory.dart';
 import 'package:nailed_it/data/factory/remote_storage_factory.dart';
 import 'package:nailed_it/data/provider/user/user_local_provider.dart';
@@ -45,7 +46,7 @@ Future<void> onSystemInit() async {
   await FlutterAppBadger.removeBadge();
 
   // Database
-  // LocalDatabaseFactory.onInit();
+  LocalDatabaseFactory.onInit();
   await LocalStorageFactory.onInit();
   await RemoteStorageFactory.onInit();
 }
