@@ -36,7 +36,7 @@ class NotificationHistoryLocalProviderImpl
   }
 
   @override
-  Future<int> findMaxID() async {
+  Future<int> findEndIndex() async {
     NotificationHistoryData? data = await (select(notificationHistory)
           ..orderBy(
               [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
@@ -44,5 +44,16 @@ class NotificationHistoryLocalProviderImpl
         .getSingleOrNull();
 
     return data?.id ?? 0;
+  }
+
+  @override
+  Future<List<NotificationHistoryData>> findAllBySmallerOrEqual(
+      int index, int page, int size) async {
+    return await (select(notificationHistory)
+          ..where((t) => t.id.isSmallerOrEqualValue(index))
+          ..orderBy(
+              [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
+          ..limit(size, offset: page))
+        .get();
   }
 }

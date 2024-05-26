@@ -31,6 +31,17 @@ class UserRepositoryImpl extends GetxService implements UserRepository {
   }
 
   @override
+  Future<bool> deleteUser() async {
+    try {
+      await _remoteProvider.deleteUser();
+
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
   Future<bool> existsUser() async {
     // Remote Update(Trigger Gap Handling)
     int maxRetries = 5;
@@ -70,16 +81,5 @@ class UserRepositoryImpl extends GetxService implements UserRepository {
       'nickname': nickname,
       'is_allowed_notification': isAllowedNotification,
     };
-  }
-
-  @override
-  Future<bool> deleteUser() async {
-    try {
-      await _remoteProvider.deleteUser();
-
-      return true;
-    } catch (_) {
-      return false;
-    }
   }
 }
