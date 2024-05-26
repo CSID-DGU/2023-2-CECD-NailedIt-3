@@ -323,5 +323,11 @@ fabric.properties
 ### AndroidStudio Patch ###
 !/gradle/wrapper/gradle-wrapper.jar
 
+# FlutterFire Congigure
+lib/app/config/firebase_options.dart
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+android/app/google-services.json
+
 
 # End of https://www.toptal.com/developers/gitignore/api/dart,flutter,macos,androidstudio,xcode,windows,visualstudiocode
