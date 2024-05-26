@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class NotificationHistoryState {
   final int id;
   final String content;
@@ -35,11 +37,13 @@ class NotificationHistoryState {
   }
 
   factory NotificationHistoryState.fromJson(Map<String, dynamic> json) {
+    DateTime createAt = DateTime.fromMillisecondsSinceEpoch(json['createdAt']);
+
     return NotificationHistoryState(
       id: json['id'],
       content: json['content'],
-      createdAt: json['created_at'],
-      isRead: json['is_read'],
+      createdAt: DateFormat('yyyy-MM-dd HH:mm').format(createAt),
+      isRead: json['isRead'],
     );
   }
 

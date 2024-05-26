@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:nailed_it/app/config/local_database_config.dart';
 import 'package:nailed_it/app/utility/log_util.dart';
+import 'package:nailed_it/data/factory/local_database_factory.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/timezone.dart';
 
@@ -133,15 +135,30 @@ abstract class NotificationUtil {
   static Future<void> onBackgroundHandler(
     RemoteMessage message,
   ) async {
-    LogUtil.info('onBackgroundHandler : $message');
+    LogUtil.debug('onBackgroundHandler');
+
+    RemoteNotification? notification = message.notification;
+
+    await saveNotification(
+      notification?.body ?? "",
+      null,
+    );
   }
 
-  static void showFlutterNotification(RemoteMessage message) {
+  static void onForegroundHandler(
+    RemoteMessage message,
+  ) async {
+    LogUtil.debug('onForegroundHandler');
+
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
+    await saveNotification(
+      notification?.body ?? "",
+      LocalDatabaseFactory.instance,
+    );
+
     if (notification != null && android != null) {
-      // 웹이 아니면서 안드로이드이고, 알림이 있는경우
       _plugin.show(
         notification.hashCode,
         notification.title,
@@ -166,5 +183,18 @@ abstract class NotificationUtil {
     } else {
       return when;
     }
+  }
+
+  static Future<void> saveNotification(
+      String content, LocalDatabase? database) async {
+    LocalDatabase currentDatabase = database ?? LocalDatabase();
+
+    await currentDatabase.notificationHistoryLocalProviderImpl.save(
+      NotificationHistoryCompanion.insert(
+        content: content,
+        isRead: false,
+        createdAt: DateTime.now(),
+      ),
+    );
   }
 }

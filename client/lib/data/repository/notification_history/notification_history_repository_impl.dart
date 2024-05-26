@@ -17,6 +17,22 @@ class NotificationHistoryRepositoryImpl extends GetxService
   }
 
   @override
+  Future<void> updateIsReadById(int params) async {
+    NotificationHistoryData data = await _localProvider.findById(params);
+
+    if (data.isRead) {
+      return;
+    }
+
+    await _localProvider.updateIsReadByData(data, true);
+  }
+
+  @override
+  Future<void> deleteAll() {
+    return _localProvider.deleteAll();
+  }
+
+  @override
   Future<List<NotificationHistoryState>> readNotificationHistories(
     int index,
     int page,

@@ -36,6 +36,11 @@ class NotificationHistoryLocalProviderImpl
   }
 
   @override
+  Future<void> deleteAll() {
+    return delete(notificationHistory).go();
+  }
+
+  @override
   Future<int> findEndIndex() async {
     NotificationHistoryData? data = await (select(notificationHistory)
           ..orderBy(
@@ -55,5 +60,11 @@ class NotificationHistoryLocalProviderImpl
               [(t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)])
           ..limit(size, offset: page))
         .get();
+  }
+
+  @override
+  Future<NotificationHistoryData> findById(int id) async {
+    return await (select(notificationHistory)..where((t) => t.id.equals(id)))
+        .getSingle();
   }
 }

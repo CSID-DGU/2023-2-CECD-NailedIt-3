@@ -17,4 +17,8 @@ abstract class NotificationHistoryLocalProvider {
     int page,
     int size,
   );
+
+  Future<NotificationHistoryData> findById(int id);
+
+  Future<void> deleteAll();
 }
