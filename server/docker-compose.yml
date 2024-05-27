@@ -1,3 +1,222 @@
+# services:
+#   elasticsearch:
+#     build:
+#       context: elasticsearch/
+#       args:
+#         ELK_VERSION: $ELK_VERSION
+#     volumes:
+#       - type: bind
+#         source: ./elasticsearch/config/elasticsearch.yml
+#         target: /usr/share/elasticsearch/config/elasticsearch.yml
+#         read_only: true
+#       - type: volume
+#         source: elasticsearch
+#         target: /usr/share/elasticsearch/data
+#     ports:
+#       - "9200:9200"
+#       - "9300:9300"
+#     environment:
+#       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+#       ELASTIC_PASSWORD: changeme
+#       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+#       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+#       discovery.type: single-node
+#     networks:
+#       - elk
+#     healthcheck:
+#       test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 5
+
+#   logstash:
+#     build:
+#       context: logstash/
+#       args:
+#         ELK_VERSION: $ELK_VERSION
+#     volumes:
+#       - type: bind
+#         source: ./logstash/config/logstash.yml
+#         target: /usr/share/logstash/config/logstash.yml
+#         read_only: true
+#       - type: bind
+#         source: ./logstash/pipeline
+#         target: /usr/share/logstash/pipeline
+#         read_only: true
+#     ports:
+#       - "5044:5044"
+#       - "5001:5000/tcp"
+#       - "5001:5000/udp"
+#       - "9600:9600"
+#     environment:
+#       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+#     networks:
+#       - elk
+#     depends_on:
+#       - elasticsearch
+
+#   kibana:
+#     build:
+#       context: kibana/
+#       args:
+#         ELK_VERSION: $ELK_VERSION
+#     volumes:
+#       - type: bind
+#         source: ./kibana/config/kibana.yml
+#         target: /usr/share/kibana/config/kibana.yml
+#         read_only: true
+#     ports:
+#       - "5601:5601"
+#     networks:
+#       - elk
+#     depends_on:
+#       - elasticsearch
+  
+#   filebeat:
+#     ports: 
+#       - "8082:8082"
+#     build:
+#       context: filebeat/
+#       args:
+#         ELK_VERSION: $ELK_VERSION
+#     volumes:
+#         - ./filebeat:/var/log
+#     networks:
+#       - elk
+#     depends_on:
+#       - logstash
+  
+#   kafka-kraft1:
+#     image: confluentinc/cp-kafka:7.5.3
+#     hostname: kafka-kraft1
+#     container_name: kafka-kraft1
+#     ports:
+#       - "9092:9092"
+#     environment:
+#       KAFKA_NODE_ID: 1
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INTERNAL://:29092,EXTERNAL://kafka-kraft1:9092
+#       KAFKA_LISTENERS: INTERNAL://:29092,CONTROLLER://:29093,EXTERNAL://0.0.0.0:9092
+#       KAFKA_PROCESS_ROLES: 'broker,controller'
+#       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-kraft1:29093,2@kafka-kraft2:29093,3@kafka-kraft3:29093
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+#       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+#     networks:
+#       - elk
+#     # network_mode: host
+  
+#   kafka-kraft2:
+#     image: confluentinc/cp-kafka:7.5.3
+#     hostname: kafka-kraft2
+#     container_name: kafka-kraft2
+#     ports:
+#       - "9093:9093"
+#     environment:
+#       KAFKA_NODE_ID: 2
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INTERNAL://:29092,EXTERNAL://kafka-kraft2:9093
+#       KAFKA_LISTENERS: INTERNAL://:29092,CONTROLLER://kafka-kraft2:29093,EXTERNAL://0.0.0.0:9093
+#       KAFKA_PROCESS_ROLES: 'broker,controller'
+#       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-kraft1:29093,2@kafka-kraft2:29093,3@kafka-kraft3:29093
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+#       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+#     networks:
+#       - elk
+#     # network_mode: host
+
+#   kafka-kraft3:
+#     image: confluentinc/cp-kafka:7.5.3
+#     hostname: kafka-kraft3
+#     container_name: kafka-kraft3
+#     ports:
+#       - "9094:9094"
+#     environment:
+#       KAFKA_NODE_ID: 3
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: INTERNAL://:29092,EXTERNAL://kafka-kraft3:9094
+#       KAFKA_LISTENERS: INTERNAL://:29092,CONTROLLER://kafka-kraft3:29093,EXTERNAL://0.0.0.0:9094
+#       KAFKA_PROCESS_ROLES: 'broker,controller'
+#       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-kraft1:29093,2@kafka-kraft2:29093,3@kafka-kraft3:29093
+#       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+#       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+#     networks:
+#       - elk
+      
+#   kafka-ui:
+#     image: provectuslabs/kafka-ui
+#     platform: linux/amd64
+#     container_name: kafka-ui
+#     ports:
+#       - "8081:8081"
+#     restart: always
+#     environment:
+#       KAFKA_CLUSTERS_0_NAME: local-cluster
+#       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-kraft1:29092,kafka-kraft2:29092,kafka-kraft3:29092
+#     depends_on:
+#       - kafka-kraft1
+#       - kafka-kraft2
+#       - kafka-kraft3
+#     networks:
+#       - elk
+
+#   mosquitto:
+#     image: eclipse-mosquitto
+#     ports:
+#       - "1883:1883"
+#     volumes:
+#       - ./mqtt_broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+#       - ./mqtt_broker:/mosquitto/data
+#       - /etc/localtime:/etc/localtime:ro
+#       - ./mqtt_broker:/app
+#     networks:
+#       - elk
+#     environment:
+#       TZ: "Asia/Seoul"
+#     # network_mode: host
+
+#   elastalert:
+#     image: jertel/elastalert2:latest
+#     container_name: elastalert
+#     environment:
+#       - ELASTICSEARCH_HOST=elasticsearch
+#       - ELASTICSEARCH_PORT=9200
+#       - "USE_SSL=false"
+#     ports:
+#       - "3030:3030"
+#     volumes:
+#       - ./elastalert/config:/opt/elastalert/config
+#       - ./elastalert/rules:/opt/elastalert/rules
+#       - ./elastalert/rule_templates:/opt/elastalert/rule_templates
+#       - ./elastalert/logs:/opt/elastalert/logs
+#     entrypoint: >
+#       sh -c "elastalert-create-index --index elastalert_status --host elasticsearch --port 9200 --user elastic --password changeme --no-verify-certs --no-ssl --url-prefix '' --old-index we_are_happy &&
+#              elastalert --config /opt/elastalert/config/config.yml --verbose"
+#     networks:
+#       - elk
+#     depends_on:
+#       elasticsearch:
+#         condition: service_healthy
+
+#   spring-test:
+#     image: chanjin/capstone_design_2
+#     container_name: spring-test
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - elk
+
+# networks:
+#   elk:
+#     ## 나중에 beat를 밖으로 빼고 연결할떄는 Host로 변경해야함
+#     driver: bridge
+
+# volumes:
+#   elasticsearch:
+#   log-data:
+
 services:
   elasticsearch:
     build:
