@@ -22,36 +22,32 @@ filebeat.inputs:
     response_body: '{"message": "success"}'
     url: "/api/v1/temperature"
 
-
-  # # REST 통신 - 전도
-  # - type: http_endpoint
-  #   enabled: true
-  #   listen_address: 0.0.0.0
-  #   listen_port: 8083
-  #   response_code: 200
-  #   response_body: '{"message": "success"}'
-  #   url: "/api/v1/conductivity"
-  #   prefix: "json"
+  # REST 통신 - 전도
+  - type: http_endpoint
+    enabled: true
+    listen_address: 0.0.0.0
+    listen_port: 8083
+    response_code: 200
+    response_body: '{"message": "success"}'
+    url: "/api/v1/conductivity"
   
-  # # REST 통신 - DO
-  # - type: http_endpoint
-  #   enabled: true
-  #   listen_address: 0.0.0.0
-  #   listen_port: 8084
-  #   response_code: 200
-  #   response_body: '{"message": "success"}'
-  #   url: "/api/v1/do"
-  #   prefix: "json"
+  # REST 통신 - DO
+  - type: http_endpoint
+    enabled: true
+    listen_address: 0.0.0.0
+    listen_port: 8084
+    response_code: 200
+    response_body: '{"message": "success"}'
+    url: "/api/v1/do"
   
-  # # REST 통신 - pH
-  # - type: http_endpoint
-  #   enabled: true
-  #   listen_address: 0.0.0.0
-  #   listen_port: 8085
-  #   response_code: 200
-  #   response_body: '{"message": "success"}'
-  #   url: "/api/v1/ph"
-  #   prefix: "json"
+  # REST 통신 - pH
+  - type: http_endpoint
+    enabled: true
+    listen_address: 0.0.0.0
+    listen_port: 8085
+    response_code: 200
+    response_body: '{"message": "success"}'
+    url: "/api/v1/ph"
 
 output.kafka:
   hosts: 
