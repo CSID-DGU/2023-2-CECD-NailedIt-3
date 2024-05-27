@@ -1,7 +1,7 @@
 # elastalert/rules/do_rule.yaml
 name: "DO Level Alert"
 type: "metric_aggregation"
-index: "we_are_happy"
+index: "we_are_happy2"
 metric_agg_key: "DO"
 metric_agg_type: "max"
 query_key: "DO"
