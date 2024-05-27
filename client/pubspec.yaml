@@ -50,11 +50,8 @@ dependencies:
   # Get Storage
   get_storage: ^2.1.1
 
-  # SQLite3 Database
-  drift: ^2.14.1
-  sqlite3_flutter_libs: ^0.5.18
-  path_provider: ^2.1.2
-  path: ^1.8.3
+  # Infinite Scroll Pagination
+  infinite_scroll_pagination: ^4.0.0
 
 dev_dependencies:
   # Default
@@ -67,10 +64,6 @@ dev_dependencies:
 
   # app icon
   flutter_launcher_icons: ^0.13.1
-
-  # SQLite3 Database
-  drift_dev: ^2.14.1
-  build_runner: ^2.4.7
 
 flutter:
   uses-material-design: true

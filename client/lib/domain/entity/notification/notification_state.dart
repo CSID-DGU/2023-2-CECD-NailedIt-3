@@ -1,25 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-class NotificationHistoryState {
-  final int id;
+class NotificationState {
+  final String id;
   final String content;
   final String createdAt;
   final bool isRead;
 
-  NotificationHistoryState({
+  NotificationState({
     required this.id,
     required this.content,
     required this.createdAt,
     required this.isRead,
   });
 
-  NotificationHistoryState copyWith({
-    int? id,
+  NotificationState copyWith({
+    String? id,
     String? content,
     String? createdAt,
     bool? isRead,
   }) {
-    return NotificationHistoryState(
+    return NotificationState(
       id: id ?? this.id,
       content: content ?? this.content,
       createdAt: createdAt ?? this.createdAt,
@@ -27,23 +28,23 @@ class NotificationHistoryState {
     );
   }
 
-  factory NotificationHistoryState.initial() {
-    return NotificationHistoryState(
-      id: 0,
+  factory NotificationState.initial() {
+    return NotificationState(
+      id: '',
       content: '',
       createdAt: '',
       isRead: false,
     );
   }
 
-  factory NotificationHistoryState.fromJson(Map<String, dynamic> json) {
-    DateTime createAt = DateTime.fromMillisecondsSinceEpoch(json['createdAt']);
+  factory NotificationState.fromJson(Map<String, dynamic> json) {
+    Timestamp createAt = json['created_at'];
 
-    return NotificationHistoryState(
+    return NotificationState(
       id: json['id'],
       content: json['content'],
-      createdAt: DateFormat('yyyy-MM-dd HH:mm').format(createAt),
-      isRead: json['isRead'],
+      createdAt: DateFormat('yyyy-MM-dd HH:mm').format(createAt.toDate()),
+      isRead: json['is_read'],
     );
   }
 
@@ -63,5 +64,17 @@ class NotificationHistoryState {
         'content: $content'
         'createdAt: $createdAt'
         'isRead: $isRead';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NotificationState && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
   }
 }

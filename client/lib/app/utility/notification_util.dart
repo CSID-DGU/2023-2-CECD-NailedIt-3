@@ -1,9 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:nailed_it/app/config/local_database_config.dart';
 import 'package:nailed_it/app/utility/log_util.dart';
-import 'package:nailed_it/data/factory/local_database_factory.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/timezone.dart';
 
@@ -138,11 +136,6 @@ abstract class NotificationUtil {
     LogUtil.debug('onBackgroundHandler');
 
     RemoteNotification? notification = message.notification;
-
-    await saveNotification(
-      notification?.body ?? "",
-      null,
-    );
   }
 
   static void onForegroundHandler(
@@ -152,11 +145,6 @@ abstract class NotificationUtil {
 
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
-
-    await saveNotification(
-      notification?.body ?? "",
-      LocalDatabaseFactory.instance,
-    );
 
     if (notification != null && android != null) {
       _plugin.show(
@@ -183,18 +171,5 @@ abstract class NotificationUtil {
     } else {
       return when;
     }
-  }
-
-  static Future<void> saveNotification(
-      String content, LocalDatabase? database) async {
-    LocalDatabase currentDatabase = database ?? LocalDatabase();
-
-    await currentDatabase.notificationHistoryLocalProviderImpl.save(
-      NotificationHistoryCompanion.insert(
-        content: content,
-        isRead: false,
-        createdAt: DateTime.now(),
-      ),
-    );
   }
 }

@@ -1,89 +1,104 @@
 import 'package:get/get.dart';
-import 'package:nailed_it/core/entity/index_pagination.dart';
-import 'package:nailed_it/domain/entity/notification/notification_history_state.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_history_repository.dart';
-import 'package:nailed_it/domain/usecase/notification_history/read_notification_histories_use_case.dart';
-import 'package:nailed_it/domain/usecase/notification_history/read_notification_history_end_index_use_case.dart';
-import 'package:nailed_it/domain/usecase/notification_history/update_is_read_use_case.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:nailed_it/core/entity/date_time_pagination.dart';
+import 'package:nailed_it/domain/entity/notification/notification_state.dart';
+import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/usecase/notification/read_notification_last_updated_at_use_case.dart';
+import 'package:nailed_it/domain/usecase/notification/read_notifications_use_case.dart';
+import 'package:nailed_it/domain/usecase/notification/update_is_read_use_case.dart';
 
 class NotificationViewModel extends GetxController {
   /* ------------------------------------------------------ */
   /* -------------------- DI Fields ----------------------- */
   /* ------------------------------------------------------ */
-  late final ReadNotificationHistoryEndIndexUseCase
-      _readNotificationHistoryEndIndexUseCase;
-  late final ReadNotificationHistoriesUseCase _readNotificationHistoriesUseCase;
+  late final ReadNotificationUpdatedAtUseCase _readNotificationUpdatedAtUseCase;
+  late final ReadNotificationsUseCase _readNotificationsUseCase;
   late final UpdateIsReadUseCase _updateIsReadUseCase;
 
   /* ------------------------------------------------------ */
   /* ----------------- Private Fields --------------------- */
   /* ------------------------------------------------------ */
-  late IndexPagination _pagination;
-  late final RxBool _isLoading;
-  late final RxList<NotificationHistoryState> _notificationHistories;
+  late final Rx<DateTimePagination> _pagination;
 
   /* ------------------------------------------------------ */
   /* ----------------- Public Fields ---------------------- */
   /* ------------------------------------------------------ */
-  List<NotificationHistoryState> get notificationHistories =>
-      _notificationHistories;
+  late final PagingController<String, Rx<NotificationState>> pagingController;
+
+  DateTimePagination get pagination => _pagination.value;
 
   @override
   void onInit() {
     super.onInit();
 
-    _readNotificationHistoryEndIndexUseCase =
-        ReadNotificationHistoryEndIndexUseCase(
-      notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
+    _readNotificationUpdatedAtUseCase = ReadNotificationUpdatedAtUseCase(
+      notificationHistoryRepository: Get.find<NotificationRepository>(),
     );
-    _readNotificationHistoriesUseCase = ReadNotificationHistoriesUseCase(
-      notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
+    _readNotificationsUseCase = ReadNotificationsUseCase(
+      notificationHistoryRepository: Get.find<NotificationRepository>(),
     );
     _updateIsReadUseCase = UpdateIsReadUseCase(
-      notificationHistoryRepository: Get.find<NotificationHistoryRepository>(),
+      notificationHistoryRepository: Get.find<NotificationRepository>(),
     );
 
-    _pagination = IndexPagination.initial();
-    _notificationHistories = <NotificationHistoryState>[].obs;
+    _pagination = DateTimePagination.initial().obs;
 
-    fetchIndexInPagination();
+    pagingController = PagingController<String, Rx<NotificationState>>(
+      firstPageKey: '',
+    );
+
+    pagingController.addPageRequestListener((pageKey) {
+      _fetchNotifications();
+    });
   }
 
-  void fetchIndexInPagination() async {
-    int endIndex = await _readNotificationHistoryEndIndexUseCase.execute();
+  @override
+  void onClose() {
+    super.onClose();
 
-    _pagination = IndexPagination(
-      index: endIndex,
-      page: -1,
+    pagingController.dispose();
+  }
+
+  void fetchPagination() async {
+    _pagination.value = DateTimePagination(
+      updatedAt: DateTime.now(),
+      lastDocId: '',
       size: 10,
     );
 
-    await fetchNotificationHistories(true);
+    pagingController.refresh();
   }
 
-  Future<void> fetchNotificationHistories(bool isHardRefresh) async {
-    _pagination = _pagination.copyWith(
-      page: _pagination.page + 1,
+  Future<void> _fetchNotifications() async {
+    List<NotificationState> readNotifications =
+        await _readNotificationsUseCase.execute(
+      _pagination.value,
     );
 
-    List<NotificationHistoryState> readNotificationHistories =
-        await _readNotificationHistoriesUseCase.execute(
-      _pagination,
+    _pagination.value = _pagination.value.copyWith(
+      lastDocId: readNotifications.isNotEmpty ? readNotifications.last.id : '',
     );
 
-    if (isHardRefresh) {
-      _notificationHistories.clear();
+    bool isLastPage = readNotifications.length < _pagination.value.size;
+
+    if (isLastPage) {
+      pagingController
+          .appendLastPage(readNotifications.map((e) => e.obs).toList());
+    } else {
+      pagingController.appendPage(
+        readNotifications.map((e) => e.obs).toList(),
+        _pagination.value.lastDocId,
+      );
     }
-
-    _notificationHistories.addAll(readNotificationHistories);
   }
 
   void fetchIsRead(int index) async {
     await _updateIsReadUseCase.execute(
-      _notificationHistories[index].id,
+      pagingController.itemList![index].value.id,
     );
 
-    _notificationHistories[index] = _notificationHistories[index].copyWith(
+    pagingController.itemList![index].value =
+        pagingController.itemList![index].value.copyWith(
       isRead: true,
     );
   }

@@ -44,7 +44,7 @@ class UserRepositoryImpl extends GetxService implements UserRepository {
   @override
   Future<bool> existsUser() async {
     // Remote Update(Trigger Gap Handling)
-    int maxRetries = 5;
+    int maxRetries = 10;
     int retryCount = 0;
 
     // Retry

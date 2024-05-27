@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
 import 'package:nailed_it/domain/repository/user/user_repository.dart';
 import 'package:nailed_it/domain/usecase/auth/login_use_case.dart';
 
@@ -26,6 +27,7 @@ class LoginViewModel extends GetxController {
 
     _loginWithGoogleUseCase = LoginUseCase(
       userRepository: Get.find<UserRepository>(),
+      notificationRepository: Get.find<NotificationRepository>(),
     );
 
     _isEnableGreyBarrier = false.obs;

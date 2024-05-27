@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nailed_it/app/config/firebase_options.dart';
-import 'package:nailed_it/app/config/local_database_config.dart';
-import 'package:nailed_it/app/utility/log_util.dart';
 import 'package:nailed_it/app/utility/notification_util.dart';
-import 'package:nailed_it/data/factory/local_database_factory.dart';
 import 'package:nailed_it/data/factory/local_storage_factory.dart';
 import 'package:nailed_it/data/factory/remote_storage_factory.dart';
 import 'package:nailed_it/data/provider/user/user_local_provider.dart';
@@ -48,21 +45,18 @@ Future<void> onSystemInit() async {
   // Widget
   await FlutterAppBadger.removeBadge();
 
-  // Database
-  LocalDatabaseFactory.onInit();
+  // Storage
   await LocalStorageFactory.onInit();
   await RemoteStorageFactory.onInit();
 }
 
 Future<void> onSystemReady() async {
-  FirebaseMessaging.onMessageOpenedApp.listen(
-    NotificationUtil.onBackgroundHandler,
-  );
   FirebaseMessaging.onMessage.listen(
     NotificationUtil.onForegroundHandler,
   );
+
   FirebaseMessaging.onBackgroundMessage(
-    onBackgroundHandler,
+    NotificationUtil.onBackgroundHandler,
   );
 
   UserLocalProvider localProvider = LocalStorageFactory.userLocalProvider;
@@ -75,22 +69,4 @@ Future<void> onSystemReady() async {
     await FirebaseAuth.instance.signOut();
     await localProvider.setFirstRun(false);
   }
-}
-
-Future<void> onBackgroundHandler(
-  RemoteMessage message,
-) async {
-  LogUtil.debug('onBackgroundHandler');
-
-  await Firebase.initializeApp();
-
-  RemoteNotification? notification = message.notification;
-
-  await LocalDatabase().notificationHistoryLocalProviderImpl.save(
-        NotificationHistoryCompanion.insert(
-          content: notification?.body ?? "",
-          isRead: false,
-          createdAt: DateTime.now(),
-        ),
-      );
 }
