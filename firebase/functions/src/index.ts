@@ -4,7 +4,7 @@ import * as logger from "firebase-functions/logger";
 import * as express from "express";
 import * as cors from "cors";
 import { UserRecord } from "firebase-admin/auth";
-import { DocumentData } from "firebase-admin/firestore";
+import { DocumentData, FieldValue } from "firebase-admin/firestore";
 
 
 admin.initializeApp();
@@ -24,13 +24,28 @@ exports.SignUp = functions.region('asia-northeast3').auth.user().onCreate(async 
         return;
     }
 
+    const now: FieldValue = admin.firestore.FieldValue.serverTimestamp();
+
     try {
+        // Create user document
         await firestore.collection('users').doc(uid).set({
             "id": uid,
             "nickname": afterNickname,
             "is_allowed_notification": true,
             "device_token": null,
-            "create_at": admin.firestore.FieldValue.serverTimestamp(),
+            "created_at": now,
+        });
+
+        // Create user notification document
+        await firestore.collection('user_notifications').doc(uid).set({
+            "updated_at": now,
+        });
+
+        // Create welcome notification in user notification document
+        await firestore.collection('user_notifications').doc(uid).collection('notifications').doc().set({
+            "content": "Nailed It에 오신 것을 환영합니다!",
+            "created_at": now,
+            "is_read": false,
         });
     } catch (error) {
         logger.error("SignUp Error: ", error);
@@ -113,25 +128,49 @@ app.post('/v1/notifications', async (req, res) => {
         );
     }
 
+    const now: FieldValue = admin.firestore.FieldValue.serverTimestamp();
+
     // Save notification log
     await firestore.collection('notification_logs').add({
         "content": content,
         "type": "notification",
         "to_user_ids": userIds,
-        "create_at": admin.firestore.FieldValue.serverTimestamp(),
+        "created_at": now,
     });
 
     // Send notifications
     const completedUserIds: string[] = [];
     for (const user of users) {
-        const deviceToken = user.data().device_token;
+        const uid: string = user.id;
+        const deviceToken: string = user.data().device_token;
 
         // Device token is not set
         if (deviceToken === null || deviceToken === undefined || deviceToken === "") {
             continue;
         }
 
+        // Save notification
+        // If the notification is not saved, the notification is not sent
+        let notificationId: string;
+        try {
+            await firestore.collection('user_notifications').doc(uid).update({
+                "updated_at": now,
+            });
+            
+            const notification: DocumentData = await firestore.collection('user_notifications').doc(uid).collection('notifications').add({
+                "content": content,
+                "created_at": now,
+                "is_read": false,
+            });
+
+            notificationId = notification.id;
+        } catch (error) {
+            logger.error("Failed to save notification - id: ", uid, " error: ", error);
+            continue;
+        }
+
         // Send notification
+        // If the notification is not sent, the notification is deleted
         try {
             await messaging.send(
                 {
@@ -154,6 +193,9 @@ app.post('/v1/notifications', async (req, res) => {
             )
         } catch (error) {
             logger.error("Failed to send notification - id: ", user.data().id, " error: ", error);
+
+            await firestore.collection('user_notifications').doc(uid).collection('notifications').doc(notificationId).delete();
+            
             continue;
         }
 
@@ -179,8 +221,8 @@ const getReceviedUsers = async (content: string, type: string) => {
 
     // Read notification Logs
     const notificationLogs : DocumentData = await firestore.collection('notification_logs')
-        .where('create_at', '>=', startAt)
-        .where('create_at', '<=', endAt)
+        .where('created_at', '>=', startAt)
+        .where('created_at', '<=', endAt)
         .get();
 
     // Filter notification logs by time range
