@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:nailed_it/app/config/color_system.dart';
 import 'package:nailed_it/app/config/font_system.dart';
-import 'package:nailed_it/domain/entity/notification/notification_history_state.dart';
+import 'package:nailed_it/domain/entity/notification/notification_state.dart';
 
-class NotificationHistoryItem extends StatelessWidget {
-  const NotificationHistoryItem({
+class NotificationItem extends StatelessWidget {
+  const NotificationItem({
     super.key,
     required this.state,
     this.onTap,
   });
 
-  final NotificationHistoryState state;
+  final NotificationState state;
   final Function()? onTap;
 
   @override
