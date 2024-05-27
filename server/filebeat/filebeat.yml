@@ -11,15 +11,45 @@ filebeat.inputs:
   #     - "#"
   #   client_id: filebeat_mqtt
 
-  # REST 통신 시 JSON으로 받을 때
+  # REST 통신 - 온도
   - type: http_endpoint
     enabled: true
     listen_address: 0.0.0.0
     listen_port: 8082
     response_code: 200
     response_body: '{"message": "success"}'
-    url: "/api/v1/logs"
+    url: "/api/v1/temperature"
     prefix: "json"
+
+  # # REST 통신 - 전도
+  # - type: http_endpoint
+  #   enabled: true
+  #   listen_address: 0.0.0.0
+  #   listen_port: 8083
+  #   response_code: 200
+  #   response_body: '{"message": "success"}'
+  #   url: "/api/v1/conductivity"
+  #   prefix: "json"
+  
+  # # REST 통신 - DO
+  # - type: http_endpoint
+  #   enabled: true
+  #   listen_address: 0.0.0.0
+  #   listen_port: 8084
+  #   response_code: 200
+  #   response_body: '{"message": "success"}'
+  #   url: "/api/v1/do"
+  #   prefix: "json"
+  
+  # # REST 통신 - pH
+  # - type: http_endpoint
+  #   enabled: true
+  #   listen_address: 0.0.0.0
+  #   listen_port: 8085
+  #   response_code: 200
+  #   response_body: '{"message": "success"}'
+  #   url: "/api/v1/ph"
+  #   prefix: "json"
 
 output.kafka:
   hosts: 
