@@ -23,6 +23,9 @@ void main() async {
   // Date Binding
   await initializeDateFormatting();
 
+  // Delay
+  await Future.delayed(const Duration(seconds: 2));
+
   // Run App
   runApp(const MainApp());
 }

@@ -1,16 +1,16 @@
 import 'package:nailed_it/core/usecase/no_param_usecase.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
 import 'package:nailed_it/domain/repository/user/user_repository.dart';
 
 class WithdrawalUseCase extends NoParamUseCase<bool> {
   WithdrawalUseCase({
     required UserRepository userRepository,
-    required NotificationRepository notificationHistoryRepository,
+    required NotificationRepository notificationRepository,
   })  : _userRepository = userRepository,
-        _notificationHistoryRepository = notificationHistoryRepository;
+        _notificationRepository = notificationRepository;
 
   final UserRepository _userRepository;
-  final NotificationRepository _notificationHistoryRepository;
+  final NotificationRepository _notificationRepository;
 
   @override
   Future<bool> execute() async {
@@ -20,7 +20,7 @@ class WithdrawalUseCase extends NoParamUseCase<bool> {
       return false;
     }
 
-    await _notificationHistoryRepository.deleteAll();
+    await _notificationRepository.deleteAll();
 
     return true;
   }
