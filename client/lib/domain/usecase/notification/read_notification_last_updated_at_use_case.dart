@@ -1,5 +1,5 @@
 import 'package:nailed_it/core/usecase/no_param_usecase.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
 
 class ReadNotificationUpdatedAtUseCase extends NoParamUseCase<DateTime> {
   ReadNotificationUpdatedAtUseCase({

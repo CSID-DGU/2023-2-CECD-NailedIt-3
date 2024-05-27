@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:nailed_it/data/factory/remote_storage_factory.dart';
 import 'package:nailed_it/data/provider/notification/notification_remote_provider.dart';
 import 'package:nailed_it/domain/entity/notification/notification_state.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
 
 class NotificationRepositoryImpl extends GetxService
     implements NotificationRepository {

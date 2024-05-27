@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nailed_it/core/entity/date_time_pagination.dart';
 import 'package:nailed_it/domain/entity/notification/notification_state.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
 import 'package:nailed_it/domain/usecase/notification/read_notification_last_updated_at_use_case.dart';
 import 'package:nailed_it/domain/usecase/notification/read_notifications_use_case.dart';
 import 'package:nailed_it/domain/usecase/notification/update_is_read_use_case.dart';

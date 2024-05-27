@@ -1,7 +1,7 @@
 import 'package:nailed_it/core/entity/date_time_pagination.dart';
 import 'package:nailed_it/core/usecase/param_usecase.dart';
 import 'package:nailed_it/domain/entity/notification/notification_state.dart';
-import 'package:nailed_it/domain/repository/notification_history/notification_repository.dart';
+import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
 
 class ReadNotificationsUseCase
     extends ParamUseCase<List<NotificationState>, DateTimePagination> {
