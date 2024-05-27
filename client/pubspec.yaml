@@ -7,8 +7,13 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  #Default
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  collection: any
+
   # Icons
   cupertino_icons: ^1.0.6
 
@@ -28,7 +33,28 @@ dependencies:
   # Svg
   flutter_svg: ^2.0.10+1
 
+  # OAuth2
+  google_sign_in: ^6.2.1
+
+  # Firebase
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.5
+
+  # Notification
+  timezone: ^0.9.2
+  flutter_app_badger: ^1.5.0
+  flutter_local_notifications: ^16.3.2
+  firebase_messaging: ^14.7.16
+
+  # Get Storage
+  get_storage: ^2.1.1
+
+  # Infinite Scroll Pagination
+  infinite_scroll_pagination: ^4.0.0
+
 dev_dependencies:
+  # Default
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
@@ -45,26 +71,25 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-#    - assets/config/.env
 
   fonts:
-    - family: Pretendard
+    - family: SUIT
       fonts:
-        - asset: assets/fonts/Pretendard-Thin.otf
+        - asset: assets/fonts/SUIT-Thin.otf
           weight: 100
-        - asset: assets/fonts/Pretendard-ExtraLight.otf
+        - asset: assets/fonts/SUIT-ExtraLight.otf
           weight: 200
-        - asset: assets/fonts/Pretendard-Light.otf
+        - asset: assets/fonts/SUIT-Light.otf
           weight: 300
-        - asset: assets/fonts/Pretendard-Regular.otf
+        - asset: assets/fonts/SUIT-Regular.otf
           weight: 400
-        - asset: assets/fonts/Pretendard-Medium.otf
+        - asset: assets/fonts/SUIT-Medium.otf
           weight: 500
-        - asset: assets/fonts/Pretendard-SemiBold.otf
+        - asset: assets/fonts/SUIT-SemiBold.otf
           weight: 600
-        - asset: assets/fonts/Pretendard-Bold.otf
+        - asset: assets/fonts/SUIT-Bold.otf
           weight: 700
-        - asset: assets/fonts/Pretendard-ExtraBold.otf
+        - asset: assets/fonts/SUIT-ExtraBold.otf
           weight: 800
-        - asset: assets/fonts/Pretendard-Black.otf
+        - asset: assets/fonts/SUIT-Heavy.otf
           weight: 900

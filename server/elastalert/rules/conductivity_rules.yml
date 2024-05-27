@@ -1,0 +1,27 @@
+# elastalert/rules/do_rule.yaml
+name: "Conductivity Level Alert"
+type: "metric_aggregation"
+index: "we_are_happy2"
+metric_agg_key: "conductivity"
+metric_agg_type: "max"
+query_key: "conductivity"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+max_threshold: 8.0  # 예시 임계값 (적절히 수정)
+filter:
+- range:
+    conductivity:
+      gt: 2000.0
+alert:
+- "post"
+http_post_url: "https://asia-northeast3-nailed-it-424108.cloudfunctions.net/api/v1/notifications"
+http_post_static_payload:
+  content: "이상 값 탐지. Conductivity 값이 2000을 초과했습니다."
+http_post_headers:
+    Content-Type: "application/json"
+
+# https://asia-northeast3-nailed-it-424108.cloudfunctions.net/api/v1/notifications
