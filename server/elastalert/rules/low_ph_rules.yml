@@ -1,0 +1,24 @@
+name: "Low PH Level Alert"
+type: "any"
+index: "we_are_happy2"
+metric_agg_key: "json.pH"
+metric_agg_type: "min"
+query_key: "json.pH"
+doc_type: "_doc"
+bucket_interval:
+  minutes: 1
+sync_bucket_interval: true
+realert:
+  minutes: 1
+min_threshold: 6.5
+filter:
+- range:
+    json.pH:
+      lt: 6.5
+alert:
+- "post"
+http_post_url: "{{SECRET_URL}}"
+http_post_static_payload:
+  content: "이상 값 탐지. 산성도(pH)가 6.5 미만입니다. 주의하세요."
+http_post_headers:
+    Content-Type: "application/json"
