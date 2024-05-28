@@ -183,6 +183,7 @@ services:
       - ELASTICSEARCH_PORT=9200
       - "USE_SSL=false"
       - SECRET_URL=${SECRET_URL}
+      - TZ=Asia/Seoul
     ports:
       - "3030:3030"
     volumes:
@@ -191,8 +192,9 @@ services:
       - ./elastalert/rule_templates:/opt/elastalert/rule_templates
       - ./elastalert/logs:/opt/elastalert/logs
     entrypoint: >
-      sh -c "elastalert-create-index --index elastalert_status --host elasticsearch --port 9200 --user elastic --password changeme --no-verify-certs --no-ssl --url-prefix '' --old-index we_are_happy &&
-             elastalert --config /opt/elastalert/config/config.yml --verbose"
+      sh -c "sed -i 's|{{SECRET_URL}}|'${SECRET_URL}'|g' /opt/elastalert/rules/*.yml && \
+            elastalert-create-index --index elastalert_status --host elasticsearch --port 9200 --user elastic --password changeme --no-verify-certs --no-ssl --url-prefix '' --old-index we_are_happy2 && \
+            elastalert --config /opt/elastalert/config/config.yml --verbose"
     networks:
       - elk
     depends_on:
