@@ -7,10 +7,10 @@ es_password: "capstone3"  # 필요한 경우 설정
 
 writeback_index: elastalert_status
 buffer_time:
-  minutes: 15
+  minutes: 5
 run_every:
   minutes: 1
 alert_time_limit:
-  days: 2
+  hours: 12
 
 rules_folder: /opt/elastalert/rules  # 규칙 파일 경로 설정
