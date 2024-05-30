@@ -134,8 +134,6 @@ abstract class NotificationUtil {
     RemoteMessage message,
   ) async {
     LogUtil.debug('onBackgroundHandler');
-
-    RemoteNotification? notification = message.notification;
   }
 
   static void onForegroundHandler(

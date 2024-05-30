@@ -3,7 +3,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nailed_it/core/entity/date_time_pagination.dart';
 import 'package:nailed_it/domain/entity/notification/notification_state.dart';
 import 'package:nailed_it/domain/repository/notification/notification_repository.dart';
-import 'package:nailed_it/domain/usecase/notification/read_notification_last_updated_at_use_case.dart';
 import 'package:nailed_it/domain/usecase/notification/read_notifications_use_case.dart';
 import 'package:nailed_it/domain/usecase/notification/update_is_read_use_case.dart';
 
@@ -11,7 +10,6 @@ class NotificationViewModel extends GetxController {
   /* ------------------------------------------------------ */
   /* -------------------- DI Fields ----------------------- */
   /* ------------------------------------------------------ */
-  late final ReadNotificationUpdatedAtUseCase _readNotificationUpdatedAtUseCase;
   late final ReadNotificationsUseCase _readNotificationsUseCase;
   late final UpdateIsReadUseCase _updateIsReadUseCase;
 
@@ -31,9 +29,6 @@ class NotificationViewModel extends GetxController {
   void onInit() {
     super.onInit();
 
-    _readNotificationUpdatedAtUseCase = ReadNotificationUpdatedAtUseCase(
-      notificationHistoryRepository: Get.find<NotificationRepository>(),
-    );
     _readNotificationsUseCase = ReadNotificationsUseCase(
       notificationHistoryRepository: Get.find<NotificationRepository>(),
     );
